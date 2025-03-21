@@ -34,4 +34,9 @@ public class BuildingMenuAnimator : SpriteAnimator
 
     }
 
+    public Sprite GetCurrentSprite()
+    {
+        return _spriteList[_currentFrame];
+    }
+
 }

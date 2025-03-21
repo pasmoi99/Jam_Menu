@@ -6,11 +6,18 @@ public class MainMenu : MonoBehaviour
 {
     public static MainMenu Menu { get; private set; }
     public MenuManager MenuManager;
-    public List<BuildingMenuAnimator> Buildings;
+    public BuildingMenuAnimator BuildingPrefab;
+    public BuildingMenuAnimator[] Buildings;
+    public Canvas Canvas;
 
 
     void Awake()
     {
         Menu = this;
+    }
+
+    private void Start()
+    {
+        Buildings = new BuildingMenuAnimator[3];
     }
 }

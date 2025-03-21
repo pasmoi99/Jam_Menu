@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
+    private float _positionOffsetChecker = 0;
+    private int _currentBuilding;
     private float _timer;
 
     private void Start()
@@ -14,9 +14,28 @@ public class MenuManager : MonoBehaviour
     void Update()
     {
         _timer += Time.deltaTime;
-        foreach(BuildingMenuAnimator building in MainMenu.Menu.Buildings)
+        if (MainMenu.Menu.Buildings.Length <= 3)
         {
-            building.Animate();
+
+        }
+        if (MainMenu.Menu.Buildings.Length > 0)
+        {
+
+            //_currentBuilding = (_currentBuilding + 1)%;
+
+
+
+            //foreach (BuildingMenuAnimator building in MainMenu.Menu.Buildings)
+            //{
+            //    _positionOffsetChecker = building.GetCurrentSprite().rect.width;
+            //    building.Animate();
+            //    if (building.transform.position.x < MainMenu.Menu.Canvas.pixelRect.position.x - _positionOffsetChecker)
+            //    {
+            //        Destroy(building.gameObject);
+            //        MainMenu.Menu.Buildings.Remove(building);
+            //    }
+            //}
+
         }
     }
 
