@@ -1,16 +1,17 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BuildingMenuAnimator : SpriteAnimator
 {
-    
     // Start is called before the first frame update
     void Start()
     {
         _currentFrame = 0;
         _imageRenderer = GetComponent<Image>();
         _imageRenderer.sprite = _spriteList[0];
+        _randModifier = Random.Range(1.5f, 2f);
     }
 
     public override void Animate()
@@ -37,6 +38,13 @@ public class BuildingMenuAnimator : SpriteAnimator
     public Sprite GetCurrentSprite()
     {
         return _spriteList[_currentFrame];
+    }
+
+    public override void SetSize(float mult)
+    {
+        float height = _imageRenderer.rectTransform.rect.height;
+        float width = _imageRenderer.rectTransform.rect.width;
+        _imageRenderer.rectTransform.sizeDelta = new Vector2(width*_randModifier, height*_randModifier);
     }
 
 }
