@@ -16,7 +16,6 @@ public class BuildingMenuAnimator : SpriteAnimator
 
     public override void Animate()
     {
-        transform.position += new Vector3(-_moveSpeed, 0, 0) * Time.deltaTime;
         if (MainMenu.Menu.MenuManager.GetTimer() >= _animationDelay && _currentFrame < _spriteList.Count - 1)
         {
             _imageRenderer.sprite = _spriteList[_currentFrame];
@@ -34,17 +33,18 @@ public class BuildingMenuAnimator : SpriteAnimator
         }        
 
     }
+    public override void SetSize()
+    {
+        float height = _imageRenderer.rectTransform.rect.height;
+        float width = _imageRenderer.rectTransform.rect.width;
+        _imageRenderer.rectTransform.sizeDelta = new Vector2(width/_randModifier, height/_randModifier);
+    }
 
     public Sprite GetCurrentSprite()
     {
         return _spriteList[_currentFrame];
     }
 
-    public override void SetSize(float mult)
-    {
-        float height = _imageRenderer.rectTransform.rect.height;
-        float width = _imageRenderer.rectTransform.rect.width;
-        _imageRenderer.rectTransform.sizeDelta = new Vector2(width*_randModifier, height*_randModifier);
-    }
-
+    public float GetRandModifier() { return _randModifier; }
+    public float GetMoveSpeed() { return _moveSpeed; }
 }

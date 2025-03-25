@@ -20,7 +20,7 @@ public class SpriteAnimator : MonoBehaviour
         transform.position += new Vector3(-_moveSpeed, 0, 0) * Time.deltaTime;
     }
 
-    public virtual void SetSize(float mult)
+    public virtual void SetSize()
     {
         
     }

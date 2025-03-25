@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     public MenuManager MenuManager;
     public BuildingMenuAnimator BuildingPrefab;
     public BuildingMenuAnimator[] Buildings;
+    public GameObject RotatingTitle;
     public Canvas Canvas;
 
 
