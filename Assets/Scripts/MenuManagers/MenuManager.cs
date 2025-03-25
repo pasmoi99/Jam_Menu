@@ -8,8 +8,10 @@ public class MenuManager : MonoBehaviour
     private MainMenu _menu;
     private Transform _canvasBG;
     private Quaternion _titleRotation1;
+    private Quaternion _titleRotation2;
 
     [SerializeField] private float _maxTitleRotation;
+    [SerializeField] private float _rotationSpeed;
 
     private void Start()
     {
@@ -22,9 +24,9 @@ public class MenuManager : MonoBehaviour
     void Update()
     {
         _timer += Time.deltaTime;
+        RotateTitle();
         for (int i = 0; i < _menu.Buildings.Length; i++)
         {
-            //RotateTitle();
 
             if (_menu.Buildings[_currentBuilding] == null && Random.Range(0, 3) == 0)
             {
@@ -41,19 +43,24 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    //TODO: Check this part agains
+    //TODO: Check this part again
 
-    //private void RotateTitle()
-    //{
-    //    if (_menu.RotatingTitle.transform.rotation.z >= _titleRotation1.z)
-    //    {
-    //        _menu.RotatingTitle.transform.rotation = Quaternion.Lerp(_titleRotation1,, Time.deltaTime);
-    //    }
-    //    else 
-    //    {
-    //        _menu.RotatingTitle.transform.rotation = Quaternion.Lerp(_titleRotation2, _titleRotation1, Time.deltaTime);
-    //    }
-    //}
+    private void RotateTitle()
+    {
+        //Quaternion rotation = new Quaternion();
+        //rotation.z += 1;
+        _menu.RotatingTitle.transform.rotation = Quaternion.Euler(0,0, Mathf.Sin(Time.time * _rotationSpeed) / (Time.deltaTime * _maxTitleRotation));
+        
+
+        //if (_menu.RotatingTitle.transform.rotation.z >= 0)
+        //{
+        //    _menu.RotatingTitle.transform.rotation = Quaternion.Lerp(_titleRotation1,_titleRotation2, Time.deltaTime);
+        //}
+        //else
+        //{
+        //    _menu.RotatingTitle.transform.rotation = Quaternion.Lerp(_titleRotation2, _titleRotation1, Time.deltaTime);
+        //}
+    }
 
     private void CreateBuilding()
     {
