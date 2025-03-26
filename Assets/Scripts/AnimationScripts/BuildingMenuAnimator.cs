@@ -11,12 +11,12 @@ public class BuildingMenuAnimator : SpriteAnimator
         _currentFrame = 0;
         _imageRenderer = GetComponent<Image>();
         _imageRenderer.sprite = _spriteList[0];
-        _randModifier = Random.Range(1.5f, 2f);
+        _randModifier = Random.Range(1f, 4f);
     }
 
     public override void Animate()
     {
-        if (MainMenu.Menu.MenuManager.GetTimer() >= _animationDelay && _currentFrame < _spriteList.Count - 1)
+        if (MainMenu.Menu.MenuManager.GetTimer() >= _animationDelay/_randModifier && _currentFrame < _spriteList.Count - 1)
         {
             _imageRenderer.sprite = _spriteList[_currentFrame];
             MainMenu.Menu.MenuManager.SetTimerTime(0);

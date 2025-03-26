@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -6,25 +7,31 @@ public class MenuManager : MonoBehaviour
     private int _currentBuilding;
     private float _timer;
     private MainMenu _menu;
-    private Transform _canvasBG;
-    private Quaternion _titleRotation1;
-    private Quaternion _titleRotation2;
+    private bool _wasButtonPressed = false;
+    private bool _wasFadeIstanceCreated = false;
+    private Image fadeTemp;
 
-    [SerializeField] private float _maxTitleRotation;
-    [SerializeField] private float _rotationSpeed;
-
+    [SerializeField] private Transform _canvasBG;
+    [SerializeField] private Image _fade;
+    
     private void Start()
     {
         _currentBuilding = 0;
         _timer = 0;
         _menu = MainMenu.Menu;
-        _canvasBG = _menu.Canvas.transform.Find("BG");
+        fadeTemp = _fade;
+
     }
     // Update is called once per frame
     void Update()
     {
         _timer += Time.deltaTime;
-        RotateTitle();
+        if (_wasButtonPressed==true)
+        {
+            
+            FadeOut();
+        }
+
         for (int i = 0; i < _menu.Buildings.Length; i++)
         {
 
@@ -41,25 +48,34 @@ public class MenuManager : MonoBehaviour
             _currentBuilding = (_currentBuilding + 1) % _menu.Buildings.Length;
 
         }
+
     }
 
-    //TODO: Check this part again
-
-    private void RotateTitle()
+    private void FadeOut()
     {
-        //Quaternion rotation = new Quaternion();
-        //rotation.z += 1;
-        _menu.RotatingTitle.transform.rotation = Quaternion.Euler(0,0, Mathf.Sin(Time.time * _rotationSpeed) / (Time.deltaTime * _maxTitleRotation));
         
+        if ( _wasFadeIstanceCreated == false)
+        {
+            _wasFadeIstanceCreated = true;
+            fadeTemp=Instantiate(_fade, _menu.Canvas.transform);
+            Color col = fadeTemp.color;
+            col.a = 0;
+            fadeTemp.color = col;
 
-        //if (_menu.RotatingTitle.transform.rotation.z >= 0)
-        //{
-        //    _menu.RotatingTitle.transform.rotation = Quaternion.Lerp(_titleRotation1,_titleRotation2, Time.deltaTime);
-        //}
-        //else
-        //{
-        //    _menu.RotatingTitle.transform.rotation = Quaternion.Lerp(_titleRotation2, _titleRotation1, Time.deltaTime);
-        //}
+        }
+        Color c = fadeTemp.color;
+        float t = Time.deltaTime;
+        if (c.a + t > 1)
+        {
+            c.a = 1;
+            fadeTemp.color = c;
+            _wasButtonPressed = false;
+        }
+        else
+        {
+            c.a += t;
+            fadeTemp.color = c;
+        }
     }
 
     private void CreateBuilding()
@@ -91,5 +107,9 @@ public class MenuManager : MonoBehaviour
     public void SetTimerTime(float time)
     {
         _timer = time;
+    }
+    public void SetWasButtonPressed()
+    {
+        _wasButtonPressed = true;
     }
 }
