@@ -19,6 +19,6 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        Buildings = new BuildingMenuAnimator[3];
+        Buildings = new BuildingMenuAnimator[4];
     }
 }

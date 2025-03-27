@@ -11,7 +11,7 @@ public class BuildingMenuAnimator : SpriteAnimator
         _currentFrame = 0;
         _imageRenderer = GetComponent<Image>();
         _imageRenderer.sprite = _spriteList[0];
-        _randModifier = Random.Range(1f, 4f);
+        _randModifier = Random.Range(1f, 10f);
     }
 
     public override void Animate()

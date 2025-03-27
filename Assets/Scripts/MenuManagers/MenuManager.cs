@@ -7,31 +7,47 @@ public class MenuManager : MonoBehaviour
     private int _currentBuilding;
     private float _timer;
     private MainMenu _menu;
-    private bool _wasButtonPressed = false;
-    private bool _wasFadeIstanceCreated = false;
-    private Image fadeTemp;
+    private bool _wasButtonStartPressed = false;
+    private bool _wasButtonQuitPressed = false;
+    private bool _isInitialFadeOver = false;
+    private bool _isFadeRunning = false;
+
 
     [SerializeField] private Transform _canvasBG;
-    [SerializeField] private Image _fade;
-    
+    [SerializeField] private Image _imageFade;
+
     private void Start()
     {
         _currentBuilding = 0;
         _timer = 0;
         _menu = MainMenu.Menu;
-        fadeTemp = _fade;
 
     }
     // Update is called once per frame
     void Update()
     {
         _timer += Time.deltaTime;
-        if (_wasButtonPressed==true)
+        #region Fade
+        if (_isInitialFadeOver != true)
         {
-            
-            FadeOut();
+            FadeIn(_imageFade, true);
         }
 
+
+        if (_wasButtonStartPressed == true)
+        {
+            FadeOut(_imageFade, _wasButtonStartPressed);
+        }
+
+
+        if (_wasButtonQuitPressed == true)
+        {
+            FadeOut(_imageFade, _wasButtonQuitPressed);
+            QuitGame();
+        }
+        #endregion
+
+        #region Animations
         for (int i = 0; i < _menu.Buildings.Length; i++)
         {
 
@@ -48,39 +64,77 @@ public class MenuManager : MonoBehaviour
             _currentBuilding = (_currentBuilding + 1) % _menu.Buildings.Length;
 
         }
+        #endregion
+    }
+    private void FadeIn(Image Fade, bool IsFadeAtStart)
+    {
+        if (_isFadeRunning == false)
+        {
+            _isFadeRunning = true;
+            Color col = _imageFade.color;
+            col.a = 1;
+            _imageFade.color = col;
+        }
 
+        Color c = Fade.color;
+        float t = Time.deltaTime;
+        if (c.a - t <= 0)
+        {
+            c.a = 0;
+            Fade.color = c;
+
+            if (IsFadeAtStart)
+            {
+                _isInitialFadeOver = true;
+            }
+            //else
+            //{
+            //    _isInitialFadeOver2 = true;
+            //}
+
+            _isFadeRunning = false;
+            print("Fade is over");
+        }
+        else
+        {
+            c.a -= t;
+            Fade.color = c;
+        }
     }
 
-    private void FadeOut()
-    {
-        
-        if ( _wasFadeIstanceCreated == false)
-        {
-            _wasFadeIstanceCreated = true;
-            fadeTemp=Instantiate(_fade, _menu.Canvas.transform);
-            Color col = fadeTemp.color;
-            col.a = 0;
-            fadeTemp.color = col;
 
+    private void FadeOut(Image Fade, bool _buttonPressed)
+    {
+
+        if (_isFadeRunning == false)
+        {
+            _isFadeRunning = true;
+            Color col = Fade.color;
+            col.a = 0;
+            Fade.color = col;
         }
-        Color c = fadeTemp.color;
+
+        Color c = Fade.color;
         float t = Time.deltaTime;
-        if (c.a + t > 1)
+        if (c.a + t >= 1)
         {
             c.a = 1;
-            fadeTemp.color = c;
-            _wasButtonPressed = false;
+            Fade.color = c;
+            _buttonPressed = false;
+            _isFadeRunning = false;
+
         }
         else
         {
             c.a += t;
-            fadeTemp.color = c;
+            Fade.color = c;
         }
     }
 
+
     private void CreateBuilding()
     {
-        Vector3 pos = new Vector3(_menu.Canvas.pixelRect.width + _menu.BuildingPrefab.GetCurrentSprite().rect.width, _menu.BuildingPrefab.GetCurrentSprite().rect.width / 2, 0f);
+        Vector3 pos = new Vector3(_menu.Canvas.pixelRect.width + _menu.BuildingPrefab.GetCurrentSprite().rect.width, _menu.BuildingPrefab.GetCurrentSprite().rect.height / 2, 0f);
         Quaternion rot = new Quaternion();
         _menu.Buildings[_currentBuilding] = Instantiate(_menu.BuildingPrefab, pos, rot, _canvasBG);
         //_menu.Buildings[_currentBuilding].SetSize();
@@ -100,6 +154,11 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    private void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public float GetTimer()
     {
         return _timer;
@@ -108,8 +167,12 @@ public class MenuManager : MonoBehaviour
     {
         _timer = time;
     }
-    public void SetWasButtonPressed()
+    public void SetWasButtonStartPressed()
     {
-        _wasButtonPressed = true;
+        _wasButtonStartPressed = true;
+    }
+    public void SetWasButtonQuitPressed()
+    {
+        _wasButtonQuitPressed = true;
     }
 }

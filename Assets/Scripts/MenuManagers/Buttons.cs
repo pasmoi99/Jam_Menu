@@ -8,7 +8,15 @@ public class Buttons : MonoBehaviour
 
     public void ButtonStart()
     {
-       
-        MainMenu.Menu.MenuManager.SetWasButtonPressed();
+        MainMenu.Menu.MenuManager.SetWasButtonStartPressed();
+        print("start");
+    }
+    public void ButtonOption() 
+    {
+        
+    }
+    public void ButtonQuit()
+    {
+        MainMenu.Menu.MenuManager.SetWasButtonQuitPressed();
     }
 }
