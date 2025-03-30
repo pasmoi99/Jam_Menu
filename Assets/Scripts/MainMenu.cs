@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     public MenuManager MenuManager;
     public BuildingMenuAnimator BuildingPrefab;
     public BuildingMenuAnimator[] Buildings;
+    public int MaxBuildingsNumber;
     public GameObject RotatingTitle;
     public Canvas Canvas;
 
@@ -19,6 +20,6 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        Buildings = new BuildingMenuAnimator[4];
+        Buildings = new BuildingMenuAnimator[MaxBuildingsNumber];
     }
 }

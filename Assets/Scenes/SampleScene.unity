@@ -654,6 +654,7 @@ MonoBehaviour:
     type: 3}
   Buildings:
   - {fileID: 0}
+  MaxBuildingsNumber: 4
   RotatingTitle: {fileID: 1756131628}
   Canvas: {fileID: 801237357}
 --- !u!4 &501990877

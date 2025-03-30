@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour
         #region Fade
         if (_isInitialFadeOver != true)
         {
-            FadeIn(_imageFade, true);
+            FadeIn(_imageFade, 0);
         }
 
 
@@ -66,7 +66,7 @@ public class MenuManager : MonoBehaviour
         }
         #endregion
     }
-    private void FadeIn(Image Fade, bool IsFadeAtStart)
+    private void FadeIn(Image Fade, int FadeType)
     {
         if (_isFadeRunning == false)
         {
@@ -83,7 +83,7 @@ public class MenuManager : MonoBehaviour
             c.a = 0;
             Fade.color = c;
 
-            if (IsFadeAtStart)
+            if (FadeType==0)
             {
                 _isInitialFadeOver = true;
             }
