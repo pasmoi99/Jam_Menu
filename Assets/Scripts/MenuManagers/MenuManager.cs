@@ -16,6 +16,7 @@ public class MenuManager : MonoBehaviour
     private bool _isInitialFadeOver = false;
     private bool _isFadeRunning = false;
 
+    private bool _wasMainMenuCleaned = false;
     private bool _isInOptions = false;
 
     [SerializeField] private Transform _canvasBG;
@@ -86,18 +87,23 @@ public class MenuManager : MonoBehaviour
                 _currentBuilding = (_currentBuilding + 1) % _menu.Buildings.Length;
 
             }
+            _wasMainMenuCleaned = false;
 
         }
-        else 
+        else
         {
-            for(int i=0; i <_menu.Buildings.Length;i++)
+            if (_wasMainMenuCleaned == false)
             {
-                if (_menu.Buildings[i] != null)
+                for (int i = 0; i < _menu.Buildings.Length; i++)
                 {
-                    Destroy(_menu.Buildings[i].gameObject);
-                    _menu.Buildings[i] = null;
-                }
+                    if (_menu.Buildings[i] != null)
+                    {
+                        Destroy(_menu.Buildings[i].gameObject);
+                        _menu.Buildings[i] = null;
+                    }
 
+                }
+                _wasMainMenuCleaned = true;
             }
         }
 
