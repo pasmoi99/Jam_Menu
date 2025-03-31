@@ -3,15 +3,20 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
-    private float _positionOffsetChecker = 0;
+
     private int _currentBuilding;
-    private float _timer;
+
     private MainMenu _menu;
+
     private bool _wasButtonStartPressed = false;
+    private bool _isTransitionOptionRunning = false;
+    private bool _wasButtonOptionPressed = false;
     private bool _wasButtonQuitPressed = false;
+
     private bool _isInitialFadeOver = false;
     private bool _isFadeRunning = false;
 
+    private bool _isInOptions = false;
 
     [SerializeField] private Transform _canvasBG;
     [SerializeField] private Image _imageFade;
@@ -19,54 +24,86 @@ public class MenuManager : MonoBehaviour
     private void Start()
     {
         _currentBuilding = 0;
-        _timer = 0;
         _menu = MainMenu.Menu;
 
+
     }
-    // Update is called once per frame
+
     void Update()
     {
-        _timer += Time.deltaTime;
+
         #region Fade
-        if (_isInitialFadeOver != true)
+        if (_isInitialFadeOver == false)
         {
-            FadeIn(_imageFade, 0);
+            FadeIn(0);
         }
 
 
         if (_wasButtonStartPressed == true)
         {
-            FadeOut(_imageFade, _wasButtonStartPressed);
+            FadeOut(0);
         }
 
+        if (_wasButtonOptionPressed == true)
+        {
+            if (_isTransitionOptionRunning == false)
+            {
+                FadeOut(1);
+            }
+            else
+            {
+                FadeIn(1);
+            }
+        }
 
         if (_wasButtonQuitPressed == true)
         {
-            FadeOut(_imageFade, _wasButtonQuitPressed);
-            QuitGame();
+            FadeOut(2);
+            if (_isFadeRunning == false)
+            {
+                //print("Quit");
+                QuitGame();
+            }
         }
         #endregion
 
-        #region Animations
-        for (int i = 0; i < _menu.Buildings.Length; i++)
+        #region Buildings
+        if (_isInOptions == false)
         {
-
-            if (_menu.Buildings[_currentBuilding] == null && Random.Range(0, 3) == 0)
+            for (int i = 0; i < _menu.Buildings.Length; i++)
             {
-                CreateBuilding();
-            }
+
+                if (_menu.Buildings[_currentBuilding] == null && Random.Range(0, 3) == 0)
+                {
+                    CreateBuilding();
+                }
 
 
-            else if (_menu.Buildings[_currentBuilding] != null)
-            {
-                ManageBuilding();
+                else if (_menu.Buildings[_currentBuilding] != null)
+                {
+                    ManageBuilding();
+                }
+                _currentBuilding = (_currentBuilding + 1) % _menu.Buildings.Length;
+
             }
-            _currentBuilding = (_currentBuilding + 1) % _menu.Buildings.Length;
 
         }
+        else 
+        {
+            for(int i=0; i <_menu.Buildings.Length;i++)
+            {
+                if (_menu.Buildings[i] != null)
+                {
+                    Destroy(_menu.Buildings[i].gameObject);
+                    _menu.Buildings[i] = null;
+                }
+
+            }
+        }
+
         #endregion
     }
-    private void FadeIn(Image Fade, int FadeType)
+    private void FadeIn(int FadeValue)
     {
         if (_isFadeRunning == false)
         {
@@ -76,78 +113,89 @@ public class MenuManager : MonoBehaviour
             _imageFade.color = col;
         }
 
-        Color c = Fade.color;
+        Color c = _imageFade.color;
         float t = Time.deltaTime;
         if (c.a - t <= 0)
         {
             c.a = 0;
-            Fade.color = c;
-
-            if (FadeType==0)
+            _imageFade.color = c;
+            if (FadeValue == 0)
             {
                 _isInitialFadeOver = true;
             }
-            //else
-            //{
-            //    _isInitialFadeOver2 = true;
-            //}
+            else if (FadeValue == 1)
+            {
+                _wasButtonOptionPressed = false;
+                _isTransitionOptionRunning = false;
+            }
 
             _isFadeRunning = false;
-            print("Fade is over");
         }
         else
         {
             c.a -= t;
-            Fade.color = c;
+            _imageFade.color = c;
         }
     }
 
 
-    private void FadeOut(Image Fade, bool _buttonPressed)
+    private void FadeOut(int FadeValue)
     {
 
         if (_isFadeRunning == false)
         {
             _isFadeRunning = true;
-            Color col = Fade.color;
+            Color col = _imageFade.color;
             col.a = 0;
-            Fade.color = col;
+            _imageFade.color = col;
         }
 
-        Color c = Fade.color;
+        Color c = _imageFade.color;
         float t = Time.deltaTime;
         if (c.a + t >= 1)
         {
             c.a = 1;
-            Fade.color = c;
-            _buttonPressed = false;
-            _isFadeRunning = false;
+            _imageFade.color = c;
+            if (FadeValue == 0)
+            {
+                _wasButtonStartPressed = false;
+                _isFadeRunning = false;
+            }
+            else if (FadeValue == 1)
+            {
+                _isTransitionOptionRunning = true;
+                _isInOptions = !_isInOptions;
+
+            }
+            else if (FadeValue == 2)
+            {
+                _wasButtonQuitPressed = false;
+                _isFadeRunning = false;
+            }
+
 
         }
         else
         {
             c.a += t;
-            Fade.color = c;
+            _imageFade.color = c;
         }
     }
 
 
     private void CreateBuilding()
     {
-        Vector3 pos = new Vector3(_menu.Canvas.pixelRect.width + _menu.BuildingPrefab.GetCurrentSprite().rect.width, _menu.BuildingPrefab.GetCurrentSprite().rect.height / 2, 0f);
+        Vector3 pos =
+            new Vector3(_menu.Canvas.pixelRect.width + _menu.BuildingPrefab.GetCurrentSprite().rect.width, _menu.BuildingPrefab.GetCurrentSprite().rect.height, 0f);
         Quaternion rot = new Quaternion();
         _menu.Buildings[_currentBuilding] = Instantiate(_menu.BuildingPrefab, pos, rot, _canvasBG);
-        //_menu.Buildings[_currentBuilding].SetSize();
+
     }
 
     private void ManageBuilding()
     {
-        _positionOffsetChecker = _menu.Buildings[_currentBuilding].GetCurrentSprite().rect.width * 2;
-        Vector3 mov =
-            new Vector3(-_menu.Buildings[_currentBuilding].GetMoveSpeed(), 0, 0) * Time.deltaTime * _menu.Buildings[_currentBuilding].GetRandModifier();
-        _menu.Buildings[_currentBuilding].transform.position += mov;
-        _menu.Buildings[_currentBuilding].Animate();
-        if (_menu.Buildings[_currentBuilding].transform.position.x < _menu.Canvas.pixelRect.position.x - _positionOffsetChecker)
+
+        if (_menu.Buildings[_currentBuilding].transform.position.x < _menu.Canvas.pixelRect.position.x - _menu.Buildings[_currentBuilding].GetPositionOffsetChecker())
         {
             Destroy(_menu.Buildings[_currentBuilding].gameObject);
             _menu.Buildings[_currentBuilding] = null;
@@ -159,17 +207,14 @@ public class MenuManager : MonoBehaviour
         Application.Quit();
     }
 
-    public float GetTimer()
-    {
-        return _timer;
-    }
-    public void SetTimerTime(float time)
-    {
-        _timer = time;
-    }
     public void SetWasButtonStartPressed()
     {
         _wasButtonStartPressed = true;
+    }
+
+    public void SetWasButtonOptionPressed()
+    {
+        _wasButtonOptionPressed = true;
     }
     public void SetWasButtonQuitPressed()
     {

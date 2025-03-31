@@ -108,5 +108,5 @@ MonoBehaviour:
   _moveSpeed: 100
   _animationSpeed: 1.22
   _animationDelay: 2
-  _randModifierMin: 1
-  _randModifierMax: 10
+  _randModifierMin: 0.835
+  _randModifierMax: 2

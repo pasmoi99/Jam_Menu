@@ -12,7 +12,7 @@ public class SpriteAnimator : MonoBehaviour
     [SerializeField] protected float _animationDelay;
 
     [SerializeField, Range(0f,1f)] protected float _randModifierMin;
-    [SerializeField, Range(1f, 10f)] protected float _randModifierMax;
+    [SerializeField, Range(2f, 10f)] protected float _randModifierMax;
     protected float _randModifier;
 
     protected int _currentFrame;
