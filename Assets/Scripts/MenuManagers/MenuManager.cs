@@ -17,11 +17,15 @@ public class MenuManager : MonoBehaviour
     private bool _isInitialFadeOver = false;
     private bool _isFadeRunning = false;
 
+    private bool _hasGameStarted = false;
+
     private bool _wasMainMenuCleaned = false;
     private bool _isInOptions = false;
 
     [SerializeField] private Transform _canvasBG;
     [SerializeField] private Image _imageFade;
+    [SerializeField] private GameObject _optionBG;
+    [SerializeField,Range(0f,2f)] private float _fadeSpeed;
 
     private void Start()
     {
@@ -115,11 +119,13 @@ public class MenuManager : MonoBehaviour
         {
             _menu.RotatingTitle.SetActive(false);
             _menu.Options.SetActive(true);
+            _optionBG.SetActive(true);
         }
         else
         {
             _menu.RotatingTitle.SetActive(true);
             _menu.Options.SetActive(false);
+            _optionBG.SetActive(false);
         }
         #endregion
 
@@ -155,7 +161,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            c.a -= t;
+            c.a -= t * _fadeSpeed;
             _imageFade.color = c;
         }
     }
@@ -182,6 +188,7 @@ public class MenuManager : MonoBehaviour
             {
                 _wasButtonStartPressed = false;
                 _isFadeRunning = false;
+                _hasGameStarted = true;
             }
             else if (FadeValue == 1)
             {
@@ -199,7 +206,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            c.a += t;
+            c.a += t*_fadeSpeed;
             _imageFade.color = c;
         }
     }
@@ -245,5 +252,10 @@ public class MenuManager : MonoBehaviour
     public void SetWasButtonReturnPressed()
     {
         _wasButtonReturnPressed = true;
+    }
+
+    public bool GetHasGameStarted()
+    {
+        return _hasGameStarted;
     }
 }
