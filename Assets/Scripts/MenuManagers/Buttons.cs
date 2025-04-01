@@ -18,4 +18,9 @@ public class Buttons : MonoBehaviour
     {
         MainMenu.Menu.MenuManager.SetWasButtonQuitPressed();
     }
+
+    public void ButtonReturn()
+    {
+        MainMenu.Menu.MenuManager.SetWasButtonReturnPressed();
+    }
 }

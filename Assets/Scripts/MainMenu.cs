@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public int MaxBuildingsNumber;
     public GameObject RotatingTitle;
     public Canvas Canvas;
+    public GameObject Options;
 
 
     void Awake()

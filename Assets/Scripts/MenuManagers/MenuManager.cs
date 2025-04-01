@@ -12,6 +12,7 @@ public class MenuManager : MonoBehaviour
     private bool _isTransitionOptionRunning = false;
     private bool _wasButtonOptionPressed = false;
     private bool _wasButtonQuitPressed = false;
+    private bool _wasButtonReturnPressed = false;
 
     private bool _isInitialFadeOver = false;
     private bool _isFadeRunning = false;
@@ -45,7 +46,7 @@ public class MenuManager : MonoBehaviour
             FadeOut(0);
         }
 
-        if (_wasButtonOptionPressed == true)
+        if (_wasButtonOptionPressed == true || _wasButtonReturnPressed==true)
         {
             if (_isTransitionOptionRunning == false)
             {
@@ -108,6 +109,20 @@ public class MenuManager : MonoBehaviour
         }
 
         #endregion
+
+        #region Options
+        if (_isInOptions)
+        {
+            _menu.RotatingTitle.SetActive(false);
+            _menu.Options.SetActive(true);
+        }
+        else
+        {
+            _menu.RotatingTitle.SetActive(true);
+            _menu.Options.SetActive(false);
+        }
+        #endregion
+
     }
     private void FadeIn(int FadeValue)
     {
@@ -132,6 +147,7 @@ public class MenuManager : MonoBehaviour
             else if (FadeValue == 1)
             {
                 _wasButtonOptionPressed = false;
+                _wasButtonReturnPressed = false;
                 _isTransitionOptionRunning = false;
             }
 
@@ -225,5 +241,9 @@ public class MenuManager : MonoBehaviour
     public void SetWasButtonQuitPressed()
     {
         _wasButtonQuitPressed = true;
+    }
+    public void SetWasButtonReturnPressed()
+    {
+        _wasButtonReturnPressed = true;
     }
 }
