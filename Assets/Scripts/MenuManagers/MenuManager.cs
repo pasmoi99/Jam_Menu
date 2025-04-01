@@ -41,19 +41,26 @@ public class MenuManager : MonoBehaviour
         #region Fade
         if (_isInitialFadeOver == false)
         {
+            _imageFade.gameObject.SetActive(true);
             FadeIn(0);
         }
 
 
         if (_wasButtonStartPressed == true)
         {
+            _imageFade.gameObject.SetActive(true);
             FadeOut(0);
+            if (_isFadeRunning == false)
+            {
+                QuitGame();
+            }
         }
 
         if (_wasButtonOptionPressed == true || _wasButtonReturnPressed==true)
         {
             if (_isTransitionOptionRunning == false)
             {
+                _imageFade.gameObject.SetActive(true);
                 FadeOut(1);
             }
             else
@@ -64,6 +71,7 @@ public class MenuManager : MonoBehaviour
 
         if (_wasButtonQuitPressed == true)
         {
+            _imageFade.gameObject.SetActive(true);
             FadeOut(2);
             if (_isFadeRunning == false)
             {
@@ -149,12 +157,14 @@ public class MenuManager : MonoBehaviour
             if (FadeValue == 0)
             {
                 _isInitialFadeOver = true;
+                _imageFade.gameObject.SetActive(false);
             }
             else if (FadeValue == 1)
             {
                 _wasButtonOptionPressed = false;
                 _wasButtonReturnPressed = false;
                 _isTransitionOptionRunning = false;
+                _imageFade.gameObject.SetActive(false);
             }
 
             _isFadeRunning = false;
@@ -194,7 +204,6 @@ public class MenuManager : MonoBehaviour
             {
                 _isTransitionOptionRunning = true;
                 _isInOptions = !_isInOptions;
-
             }
             else if (FadeValue == 2)
             {
