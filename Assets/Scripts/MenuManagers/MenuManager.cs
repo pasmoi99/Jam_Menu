@@ -122,6 +122,12 @@ public class MenuManager : MonoBehaviour
 
         #endregion
 
+        #region Palmtrees
+
+
+
+        #endregion
+
         #region Options
         if (_isInOptions)
         {

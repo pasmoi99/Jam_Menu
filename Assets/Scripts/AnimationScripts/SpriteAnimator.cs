@@ -18,7 +18,8 @@ public class SpriteAnimator : MonoBehaviour
     protected int _currentFrame;
     protected Image _imageRenderer;
 
-    public virtual void Animate() {
+    public virtual void Animate() 
+    {
         transform.position += new Vector3(-_moveSpeed, 0, 0) * Time.deltaTime;
     }
 
